@@ -43,10 +43,13 @@ def log():
 def reg():
     iusr = request.form.get("iusr")
     ipass = request.form.get("ipass")
-    login = Userlogpass(username=iusr, password=ipass)
-    db.session.add(login)
-    db.session.commit()
-    return redirect( url_for('login') )
+    if iusr and ipass == db.session.query(Userlogpass):
+        login = Userlogpass(username=iusr, password=ipass)
+        db.session.add(login)
+        db.session.commit()
+        return redirect( url_for('login') )
+    else:
+        return '<center><h5>account already exists, please log in</h5></center>' + render_template('login.html')
     #регистрация пользователя + занесение в DB
 
 @app.route("/login", methods = ['POST', 'GET']) 
